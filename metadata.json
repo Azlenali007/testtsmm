@@ -1,0 +1,6 @@
+{
+  "name": "ApexSMM — Social Media Marketing Panel",
+  "description": "Enterprise Core PHP 8.2+ SMM Panel with native PDO prepared statements, atomic wallet transactions, Tailwind CSS, Alpine.js, and SMM v2 API provider integrations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
