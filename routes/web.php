@@ -18,6 +18,8 @@ use App\Controllers\WalletController;
 
 // 1. Public & Guest Routes
 $router->get('/', [HomeController::class, 'index']);
+$router->get('/index.html', [HomeController::class, 'index']);
+$router->get('/index.php', [HomeController::class, 'index']);
 $router->get('/terms', [HomeController::class, 'terms']);
 $router->get('/privacy', [HomeController::class, 'privacy']);
 $router->get('/services', [ServiceController::class, 'index']);
