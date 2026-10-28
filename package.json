@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "php -S 0.0.0.0:3000 -t public public/index.php",
     "start": "php -S 0.0.0.0:3000 -t public public/index.php",
-    "build": "node -e \"console.log('Build verified: Core PHP static assets and templates ready')\"",
+    "build": "npx @tailwindcss/cli -i resources/css/app.css -o public/assets/css/app.css --minify && cp -r public/assets/* assets/ 2>/dev/null || true",
     "clean": "rm -rf storage/cache/*",
     "lint": "php -l public/index.php"
   },

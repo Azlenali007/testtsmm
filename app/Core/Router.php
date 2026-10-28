@@ -93,7 +93,8 @@ class Router
         $uri = $request->getUri();
 
         foreach ($this->routes as $route) {
-            if ($route['method'] !== $method) {
+            $routeMethod = $route['method'];
+            if ($routeMethod !== $method && !($method === 'HEAD' && $routeMethod === 'GET')) {
                 continue;
             }
 

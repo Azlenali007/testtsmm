@@ -20,12 +20,40 @@ class Request
         
         $uri = $_SERVER['REQUEST_URI'] ?? '/';
         $pos = strpos($uri, '?');
-        $this->uri = $pos !== false ? substr($uri, 0, $pos) : $uri;
-        $this->uri = '/' . trim($this->uri, '/');
-        if ($this->uri === '//') {
-            $this->uri = '/';
+        $path = $pos !== false ? substr($uri, 0, $pos) : $uri;
+
+        // Strip SCRIPT_NAME directory prefix if running in a subdirectory
+        $scriptDir = dirname($_SERVER['SCRIPT_NAME'] ?? '');
+        if ($scriptDir !== '/' && $scriptDir !== '\\' && $scriptDir !== '.' && $scriptDir !== '') {
+            $scriptDir = str_replace('\\', '/', $scriptDir);
+            if (str_starts_with($path, $scriptDir)) {
+                $path = substr($path, strlen($scriptDir));
+            }
         }
 
+        // Strip /index.php if directly prefixed in URI
+        if (str_starts_with($path, '/index.php')) {
+            $path = substr($path, strlen('/index.php'));
+        }
+
+        // Support explicit query parameter routing (e.g. ?route=/login or ?p=login)
+        if (!empty($_GET['route']) && is_string($_GET['route'])) {
+            $path = $_GET['route'];
+        } elseif (!empty($_GET['page']) && is_string($_GET['page']) && ($path === '' || $path === '/')) {
+            $path = '/' . ltrim($_GET['page'], '/');
+        }
+
+        // Strip .php or .html extension for standard pages (e.g. /login.html -> /login)
+        if (preg_match('#^/([a-zA-Z0-9_\-/]+)\.(php|html)$#i', $path, $matches)) {
+            $path = '/' . $matches[1];
+        }
+
+        $path = '/' . trim($path, '/');
+        if ($path === '//') {
+            $path = '/';
+        }
+
+        $this->uri = $path;
         $this->queryParams = $_GET;
         $this->postParams = $_POST;
         $this->headers = $this->extractHeaders();

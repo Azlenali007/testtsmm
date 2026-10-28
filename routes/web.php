@@ -26,17 +26,33 @@ $router->get('/services', [ServiceController::class, 'index']);
 $router->get('/services/detail/{id}', [ServiceController::class, 'detail']);
 
 $router->group(['middleware' => ['guest']], function ($router) {
+    // Login / Sign In
     $router->get('/login', [AuthController::class, 'showLogin']);
+    $router->get('/signin', [AuthController::class, 'showLogin']);
     $router->post('/login', [AuthController::class, 'login'], ['csrf']);
+    $router->post('/signin', [AuthController::class, 'login'], ['csrf']);
+
+    // Register / Sign Up
     $router->get('/register', [AuthController::class, 'showRegister']);
+    $router->get('/signup', [AuthController::class, 'showRegister']);
     $router->post('/register', [AuthController::class, 'register'], ['csrf']);
+    $router->post('/signup', [AuthController::class, 'register'], ['csrf']);
+
+    // Password Recovery
     $router->get('/forgot-password', [AuthController::class, 'showForgotPassword']);
+    $router->get('/forgot', [AuthController::class, 'showForgotPassword']);
+    $router->get('/password/forgot', [AuthController::class, 'showForgotPassword']);
     $router->post('/forgot-password', [AuthController::class, 'forgotPassword'], ['csrf']);
+    $router->post('/forgot', [AuthController::class, 'forgotPassword'], ['csrf']);
     $router->get('/reset-password', [AuthController::class, 'showResetPassword']);
+    $router->get('/password/reset', [AuthController::class, 'showResetPassword']);
     $router->post('/reset-password', [AuthController::class, 'resetPassword'], ['csrf']);
+    $router->post('/password/reset', [AuthController::class, 'resetPassword'], ['csrf']);
 });
 
 $router->get('/logout', [AuthController::class, 'logout']);
+$router->get('/signout', [AuthController::class, 'logout']);
+$router->post('/logout', [AuthController::class, 'logout']);
 
 // 2. Protected Authenticated User Routes
 $router->group(['middleware' => ['auth']], function ($router) {
